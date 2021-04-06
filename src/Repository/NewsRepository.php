@@ -9,6 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method News|null find($id, $lockMode = null, $lockVersion = null)
  * @method News|null findOneBy(array $criteria, array $orderBy = null)
+ * @method News[]    findAll()
  * @method News[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class NewsRepository extends ServiceEntityRepository
@@ -18,7 +19,7 @@ class NewsRepository extends ServiceEntityRepository
         parent::__construct($registry, News::class);
     }
 
-    public function findAll()
+    public function findAllQuery()
     {
         return $this->findBy(array(), array('publicatDate' => 'DESC'));
     }
@@ -32,8 +33,8 @@ class NewsRepository extends ServiceEntityRepository
             ->join('news.hashtag', 'tag')
             ->where('tag.tag LIKE :val')
             ->setParameter('val', '%' . $value . '%')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('news.publicatDate')
+            ->getQuery();
     }
 
     public function searchByQuery(string $query, string $where)
@@ -44,8 +45,8 @@ class NewsRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('n')
             ->where("n.$where LIKE :query")
             ->setParameter('query', '%' . $query . '%')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('n.publicatDate')
+            ->getQuery();
     }
 
 
