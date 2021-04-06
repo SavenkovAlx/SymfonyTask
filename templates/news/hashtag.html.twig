@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Новости по тегу: #{{ tag }} <a href="{{ path('homepage') }}">вернуться на главную</a></h1>
+    <div class="row no-gutters">
+        <div class="col-sm-6 col-md-8">
+            <div class="card">
+                <ul class="list-group list-group-flush">
+                    {% for news_item in news %}
+                        <li class="list-group-item">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">{{ news_item.publicatDate|date("d.m.Y h:i") }}</h6>
+                                {% if news_item.image is not null %}<img class="card-img-top"
+                                                                         src="{{ news_item.image }}"
+                                                                         alt="Card image cap">{% endif %}
+                                <p class="card-text">{{ news_item.text }}</p>
+                                {% for hashtag in news_item.hashtag %}
+                                    <a href="{{ path('tagpage', {'slug': hashtag.tag}) }}"
+                                       class="card-link">#{{ hashtag.tag }}</a>
+                                {% endfor %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="list-group">
+                {% for tags in pop_hashtags|sort((a, b) => (b.news|length <=> a.news|length)) %}
+                    <a href="{{ path('tagpage', {'slug': tags.tag}) }}"
+                       class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">#{{ tags.tag }}
+                        <span class="badge badge-primary badge-pill">{{ tags.news|filter(n => n.publicatDate > "now"|date|date_modify("-20 day"))|length }}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block title %} Homepage {% endblock %}
