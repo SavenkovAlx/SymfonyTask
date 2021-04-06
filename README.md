@@ -30,7 +30,7 @@ Symfony based news site
    Командой `php bin/console make:migration` создаём миграцию таблиц
    Командой `php bin/console doctrine:migrations:migrate` выполняем миграцию
 3. Запускаем сервер командой `php -S localhost:8000 -t public`
-4. Для обновления списка новостей используем команду `php bin/console app:update-feeds`
+4. Для обновления списка новостей используем команду `php bin/console app:update-news`
 
 # Для удобной загрузки файлов на сервер используйте wget
 * `wget https://github.com/SavenkovAlx/SymfonyTask/archive/refs/heads/main.zip`
